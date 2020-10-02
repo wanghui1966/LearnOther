@@ -5,3 +5,6 @@
 
 # 2. StateMachine
 一个可自由组装状态的状态机实现
+
+# 3. String
+一个模拟std::string类实现

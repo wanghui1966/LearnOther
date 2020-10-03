@@ -60,7 +60,7 @@ MyString::MyString(const MyString& str)
 	strcpy(m_data, str.m_data);
 }
 
-const MyString& MyString::operator=(const MyString& str)
+const MyString& MyString::operator = (const MyString& str)
 {
 	if (this == &str)
 	{
@@ -82,20 +82,20 @@ MyString::MyString(int length)
 	m_data = (char*)calloc(m_capacity, sizeof(char));
 }
 
-char& MyString::operator[](int pos)
+char& MyString::operator [] (int pos)
 {
 	assert((pos >= 0) && (pos < m_length));
 	return m_data[pos];
 
 }
 
-const char& MyString::operator[](int pos) const
+const char& MyString::operator [] (int pos) const
 {
 	assert((pos >= 0) && (pos < m_length));
 	return m_data[pos];
 }
 
-MyString& MyString::operator+(const MyString& str)
+MyString& MyString::operator + (const MyString& str)
 {
 	if (str.m_length == 0)
 	{
@@ -110,45 +110,49 @@ MyString& MyString::operator+(const MyString& str)
 	}
 }
 
-MyString& MyString::operator+=(const MyString& str)
+MyString& MyString::operator += (const MyString& str)
 {
 	if (str.m_length == 0)
 	{
 		return *this;
 	}
 	m_length += str.m_length;
-	m_capacity = GetCapacityByLength(m_length);
-	m_data = (char*)realloc(m_data, sizeof(char) * m_capacity);
+	int new_capacity = GetCapacityByLength(m_length);
+	if (new_capacity > m_capacity)
+	{
+		m_capacity = GetCapacityByLength(m_length);
+		m_data = (char*)realloc(m_data, sizeof(char) * m_capacity);
+	}
 	strcat(m_data, str.m_data);
 	return *this;
 }
 
-bool MyString::operator>(const MyString& str)
+bool MyString::operator > (const MyString& str)
 {
 	return (strcmp(m_data, str.m_data) > 0);
 }
 
-bool MyString::operator>=(const MyString& str)
+bool MyString::operator >= (const MyString& str)
 {
 	return (strcmp(m_data, str.m_data) >= 0);
 }
 
-bool MyString::operator<(const MyString& str)
+bool MyString::operator < (const MyString& str)
 {
 	return (strcmp(m_data, str.m_data) < 0);
 }
 
-bool MyString::operator<=(const MyString& str)
+bool MyString::operator <= (const MyString& str)
 {
 	return (strcmp(m_data, str.m_data) <= 0);
 }
 
-bool MyString::operator==(const MyString& str)
+bool MyString::operator == (const MyString& str)
 {
 	return (strcmp(m_data, str.m_data) == 0);
 }
 
-bool MyString::operator!=(const MyString& str)
+bool MyString::operator != (const MyString& str)
 {
 	return (strcmp(m_data, str.m_data) != 0);
 }
@@ -163,13 +167,13 @@ int MyString::Capacity() const
 	return m_capacity;
 }
 
-std::istream& operator>>(std::istream& object, MyString& str)
+std::istream& operator >> (std::istream& object, MyString& str)
 {
 	object >> str.m_data;
 	return object;
 }
 
-std::ostream& operator<<(std::ostream& object, const MyString& str)
+std::ostream& operator << (std::ostream& object, const MyString& str)
 {
 	object << str.m_data;
 	return object;

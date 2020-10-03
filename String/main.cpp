@@ -33,5 +33,11 @@ int main()
 	str2[2] = 'C';
 	Compare(str, str2);
 
+	for (int i = 0; i < 10; ++i)
+	{
+		str += "def";
+		Output(str);
+	}
+
 	return 0;
 }

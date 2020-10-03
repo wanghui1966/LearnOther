@@ -193,7 +193,7 @@ BigInt& BigInt::operator *= (const BigInt &value)
 	BigInt temp_sum_sum;
 	for(int i = value.m_data.size() - 1 ; i > 0 ; --i)
 	{
-		// ´Ë´¦¿ÉÓÅ»¯Îª1,2,4,8·½Ê½£¡£¡£¡
+		// æ­¤å¤„å¯ä¼˜åŒ–ä¸º1,2,4,8æ–¹å¼ï¼ï¼ï¼
 		BigInt temp_sum;
 		for (int j = 0; j < (value.m_data[i] - '0'); ++j)
 		{
@@ -378,7 +378,7 @@ bool BigInt::operator <= (const BigInt &value)
 	return (Compare(value) <= 0);
 }
 
-//±È½Ï´óĞ¡£¬>·µ»Ø1£¬==·µ»Ø0£¬<·µ»Ø-1
+//æ¯”è¾ƒå¤§å°ï¼Œ>è¿”å›1ï¼Œ==è¿”å›0ï¼Œ<è¿”å›-1
 int BigInt::Compare(const BigInt &value)
 {
 	if ((m_data[0] == '-') && (value.m_data[0] == '+'))
@@ -473,7 +473,7 @@ int BigInt::CompareUnsigned(const BigInt &value)
 
 void BigInt::Plus(const std::string &value)
 {
-	// Ê¹µÃm_data³¤¶È´óÓÚvalueµÄ³¤¶È
+	// ä½¿å¾—m_dataé•¿åº¦å¤§äºvalueçš„é•¿åº¦
 	std::string::size_type start = 1;
 	if (m_data.size() < value.size())
 	{
@@ -495,7 +495,7 @@ void BigInt::Plus(const std::string &value)
 	}
 	m_data[i] += (value[1] - '0');
 
-	// ÏòÇ°½øÎ»
+	// å‘å‰è¿›ä½
 	while ((i > 1) && (m_data[i] > '9'))
 	{
 		m_data[i] -= 10;
@@ -511,13 +511,13 @@ void BigInt::Plus(const std::string &value)
 
 void BigInt::Minus(const std::string &value)
 {
-	// ´Ë´¦Ò»¶¨ÓĞi >= j
+	// æ­¤å¤„ä¸€å®šæœ‰i >= j
 	std::string::size_type i = m_data.size() - 1;
 	std::string::size_type j = value.size() - 1;
 	while (j > 0)
 	{
 		m_data[i] -= (value[j] - '0');
-		// ½èÎ»
+		// å€Ÿä½
 		if (m_data[i] < '0')
 		{
 			m_data[i] += 10;
@@ -526,7 +526,7 @@ void BigInt::Minus(const std::string &value)
 		--i;
 		--j;
 	}
-	// ÏòÇ°½èÎ»£¬µÚ1Î»¿Ï¶¨¹»½è£¬²»ÓÃ¹Ü
+	// å‘å‰å€Ÿä½ï¼Œç¬¬1ä½è‚¯å®šå¤Ÿå€Ÿï¼Œä¸ç”¨ç®¡
 	while ((i > 1) && (m_data[i] < '0'))
 	{
 		m_data[i] += 10;
@@ -534,7 +534,7 @@ void BigInt::Minus(const std::string &value)
 		--m_data[i];
 	}
 
-	// È¥µôÇ°ÃæµÄ0
+	// å»æ‰å‰é¢çš„0
 	std::string::size_type start = 1;
 	std::string::size_type end = 1;
 	for( ; ((end < m_data.size()) && (m_data[end] == '0')); ++end)

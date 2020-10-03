@@ -1,0 +1,41 @@
+6
+v0 v1 v2 v3 v4 v5
+8
+v0 v2 10
+v0 v4 30
+v0 v5 100
+v1 v2 5
+v2 v3 50
+v3 v4 20
+v3 v5 10
+v4 v5 60
+
+
+6
+v1 v2 v3 v4 v5 v6
+10
+v1 v2 6
+v1 v3 1
+v1 v4 5
+v2 v3 5
+v2 v5 3
+v3 v4 5
+v3 v5 6
+v3 v6 4
+v4 v6 2
+v5 v6 6
+
+7
+a b c d e f g
+11
+a b 7
+a d 5
+b c 8
+b d 9
+b e 7
+c e 5
+d e 15
+d f 6
+e f 8
+e g 9
+f g 11

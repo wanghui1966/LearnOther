@@ -36,8 +36,8 @@ public:
 	int Capacity() const;
 
 protected:
-	int m_length = 0;				// 实际长度
-	int m_capacity = 0;				// 大小
+	int m_length = 0;				// 瀹為檯闀垮害
+	int m_capacity = 0;				// 澶у皬
 	char *m_data = nullptr;
 };
 

@@ -1,46 +1,61 @@
 #ifndef BINARYTREE_H
 #define BINARYTREE_H
 
-typedef struct Node
+struct Node
 {
-    Node() : data(0), left(nullptr), right(nullptr) {}
-    Node(char d) : data(d), left(nullptr), right(nullptr) {}
+	Node() : data(0), left(nullptr), right(nullptr) {}
+	Node(int d) : data(d), left(nullptr), right(nullptr) {}
 
-    char data;
-    struct Node *left;
-    struct Node *right;
-}Node;
+	char data = 0;
+	struct Node *left = nullptr;
+	struct Node *right = nullptr;
+};
 
-class BinaryTree{
+class BinaryTree
+{
 public:
-    BinaryTree();
-    virtual ~BinaryTree();
+	BinaryTree() : head(nullptr), count(0) {}
+	virtual ~BinaryTree();
 
 public:
-    // 释放结点
-    void ReleaseNode(Node *&p);
+	// 先序建立二叉树：按照二叉树先序方式输入结点，以空格作为结点分隔符号，-表示null叶结点
+	void PreOrderCreate();
 
-    // 先序建立二叉树：安装二叉树先序方式输入结点，以空格作为结点分隔符号，-表示null叶结点
-    void PreOrderCreate();
-    void PreOrderCreateAssist(Node *&p);
+	// 根据前序遍历和中序遍历重建二叉树
+	bool RebuildTreeByPreOrderAndInOrder(char *pre_order_seq, char *in_order_seq, int node_count);
 
-    // 递归方式遍历，分别为先序、中序和后序
-    void PreOrderTraverse();
-    void InOrderTraverse();
-    void PostOrderTraverse();
+	// 根据输入建立二叉排序树
+	bool RebuildSortTree(char *seq, int node_count);
 
-    void PreOrderTraverseAssist(Node **p);
-    void InOrderTraverseAssist(Node *&p);
-    void PostOrderTraverseAssist(Node *&p);
+public:
+	// 递归方式遍历，分别为先序、中序和后序
+	void PreOrderTraverse();
+	void InOrderTraverse();
+	void PostOrderTraverse();
 
-    // 非递归方式遍历，分别为先序、中序和后序
-    void PreOrderTraverseNot();
-    void InOrderTraverseNot();
-    void PostOrderTraverseNot();
+public:
+	// 非递归方式遍历，分别为先序、中序和后序
+	void PreOrderTraverseNot();
+	void InOrderTraverseNot();
+	void PostOrderTraverseNot();
+
+public:
+	// 二叉树变为双向循环链表
+	bool ConvertDoubleLink(Node *&first, Node *&last);
 
 protected:
-    Node *head;
-    int num;
+	void PreOrderCreateAssist(Node *&p);
+	void ReleaseNode(Node *&p);
+	void PreOrderTraverseAssist(Node **p);
+	void InOrderTraverseAssist(Node *&p);
+	void PostOrderTraverseAssist(Node *&p);
+	Node* RebuildTreeByPreOrderAndInOrderAssist(char *pre_order_seq, char *in_order_seq, int node_count);
+	void ConvertDoubleLinkAssist(Node *node, Node *&first, Node *&last);
+	bool FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos);
+
+protected:
+	Node *head = nullptr;
+	int count = 0;
 };
 
 #endif

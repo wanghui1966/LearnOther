@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void TestAssist()
+void TestCommon()
 {
 	BinaryTree *bt = new BinaryTree;
 
@@ -97,11 +97,47 @@ void TestConvertDoubleLink()
 	delete bt;
 }
 
+void TestCmp()
+{
+	BinaryTree *bt1 = new BinaryTree;
+	BinaryTree *bt2 = new BinaryTree;
+
+	std::cout << "bt1==bt2 = " << bt1->StructureCmp(bt2) << std::endl;
+
+	char seq1[10] = "akgmrlpit";
+	char seq2[10] = "akgmrlpiw";
+	if (bt1->RebuildSortTree(seq1, 9))
+	{
+		std::cout << "bt1==bt2 = " << bt1->StructureCmp(bt2) << std::endl;
+		if (bt2->RebuildSortTree(seq2, 9))
+		{
+			std::cout << "bt1==bt2 = " << bt1->StructureCmp(bt2) << std::endl;
+		}
+	}
+
+	delete bt1;
+	delete bt2;
+
+	BinaryTree *bt3 = new BinaryTree;
+	BinaryTree *bt4 = new BinaryTree;
+
+	char seq3[10] = "akgmrlpit";
+	char seq4[10] = "akgmrlpic";
+	if (bt3->RebuildSortTree(seq3, 9) && bt4->RebuildSortTree(seq4, 9))
+	{
+		std::cout << "bt3==bt4 = " << bt3->StructureCmp(bt4) << std::endl;
+	}
+
+	delete bt1;
+	delete bt2;
+}
+
 int main()
 {
-	//TestAssist();
+	//TestCommon();
 	//TestRebuildTree();
 	//TestSortTree();
-	TestConvertDoubleLink();
+	//TestConvertDoubleLink();
+	TestCmp();
 	return 0;
 }

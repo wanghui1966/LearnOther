@@ -18,6 +18,10 @@ public:
 	virtual ~BinaryTree();
 
 public:
+	int GetDepth(Node *p);
+	bool StructureCmp(const BinaryTree *tree);
+
+public:
 	// 先序建立二叉树：按照二叉树先序方式输入结点，以空格作为结点分隔符号，-表示null叶结点
 	void PreOrderCreate();
 
@@ -52,6 +56,7 @@ protected:
 	Node* RebuildTreeByPreOrderAndInOrderAssist(char *pre_order_seq, char *in_order_seq, int node_count);
 	void ConvertDoubleLinkAssist(Node *node, Node *&first, Node *&last);
 	bool FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos);
+	bool StructureCmpAssist(Node *node1, Node *node2);
 
 protected:
 	Node *head = nullptr;

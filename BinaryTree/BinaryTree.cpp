@@ -11,6 +11,27 @@ BinaryTree::~BinaryTree()
 	std::cout << std::endl;
 }
 
+int BinaryTree::GetDepth(Node *p)
+{
+	if (!p)
+	{
+		return 0;
+	}
+
+	int left_depth = GetDepth(p->left);
+	int right_depth = GetDepth(p->right);
+	return (left_depth > right_depth ? (left_depth + 1) : (right_depth + 1));
+}
+
+bool BinaryTree::StructureCmp(const BinaryTree *tree)
+{
+	if (!tree && !head)
+	{
+		return true;
+	}
+
+	return StructureCmpAssist(head, tree->head);
+}
 
 void BinaryTree::PreOrderCreate()
 {
@@ -343,4 +364,18 @@ bool BinaryTree::FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos)
 	{
 		return FindSortTreePos(p->right, key, p, pos);
 	}
+}
+
+bool BinaryTree::StructureCmpAssist(Node *node1, Node *node2)
+{
+	if (!node1 && !node2)
+	{
+		return true;
+	}
+	else if (!node1 || !node2)
+	{
+		return false;
+	}
+
+	return (StructureCmpAssist(node1->left, node2->left) && StructureCmpAssist(node1->right, node2->right));
 }

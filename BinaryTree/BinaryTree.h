@@ -17,7 +17,7 @@ public:
 	BinaryTree() : head(nullptr), count(0) {}
 	virtual ~BinaryTree();
 
-publoic:
+public:
 	// 二叉树的深度
 	int GetDepth(Node *p);
 

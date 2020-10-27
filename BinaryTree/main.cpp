@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void TestCommon()
+void TestTraverse()
 {
 	BinaryTree *bt = new BinaryTree;
 
@@ -132,12 +132,52 @@ void TestCmp()
 	delete bt2;
 }
 
+void TestConvertLeftAndRight()
+{
+	BinaryTree *bt = new BinaryTree;
+
+	char seq[10] = "abdefghic";
+	if (bt->RebuildSortTree(seq, 9))
+	{
+		bt->PreOrderTraverse();
+		bt->InOrderTraverse();
+		bt->PostOrderTraverse();
+
+		bt->ConvertLeftAndRight();
+
+		bt->PreOrderTraverse();
+		bt->InOrderTraverse();
+		bt->PostOrderTraverse();
+	}
+
+	delete bt;
+}
+
+void TestCommon()
+{
+	BinaryTree *bt = new BinaryTree;
+
+	char seq[10] = "abdefghic";
+	if (bt->RebuildSortTree(seq, 9))
+	{
+		bt->PreOrderTraverse();
+		bt->InOrderTraverse();
+		bt->PostOrderTraverse();
+
+		std::cout << "叶子结点数量：" << bt->GetLeafNodeCount() << std::endl;
+	}
+
+	delete bt;
+}
+
 int main()
 {
-	//TestCommon();
+	//TestTraverse();
 	//TestRebuildTree();
 	//TestSortTree();
 	//TestConvertDoubleLink();
-	TestCmp();
+	//TestConvertLeftAndRight();
+	//TestCmp();
+	//TestCommon();
 	return 0;
 }

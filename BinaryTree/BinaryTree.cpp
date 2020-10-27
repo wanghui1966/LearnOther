@@ -23,6 +23,11 @@ int BinaryTree::GetDepth(Node *p)
 	return (left_depth > right_depth ? (left_depth + 1) : (right_depth + 1));
 }
 
+int BinaryTree::GetLeafNodeCount()
+{
+	return GetLeafNodeCountAssist(head);
+}
+
 bool BinaryTree::StructureCmp(const BinaryTree *tree)
 {
 	if (!tree && !head)
@@ -206,6 +211,13 @@ bool BinaryTree::ConvertDoubleLink(Node *&first, Node *&last)
 	return (first && last);
 }
 
+
+void BinaryTree::ConvertLeftAndRight()
+{
+	std::cout << "二叉树转换左右子树：" << std::endl;
+	ConvertLeftAndRightAssist(head);
+}
+
 void BinaryTree::PreOrderCreateAssist(Node *&p)
 {
 	char temp;
@@ -378,4 +390,53 @@ bool BinaryTree::StructureCmpAssist(Node *node1, Node *node2)
 	}
 
 	return (StructureCmpAssist(node1->left, node2->left) && StructureCmpAssist(node1->right, node2->right));
+}
+
+Node* BinaryTree::ConvertLeftAndRightAssist(Node *p)
+{
+	if (!p)
+	{
+		return nullptr;
+	}
+
+	Node *left = nullptr;
+	if (p->left)
+	{
+		left = ConvertLeftAndRightAssist(p->left);
+	}
+	Node *right = nullptr;
+	if (p->right)
+	{
+		right = ConvertLeftAndRightAssist(p->right);
+	}
+
+	p->left = right;
+	p->right = left;
+	return p;
+}
+
+int BinaryTree::GetLeafNodeCountAssist(Node *p)
+{
+	if (!p)
+	{
+		return 0;
+	}
+
+	if (!p->left && !p->right)
+	{
+		return 1;
+	}
+
+	int left_leaf_node_count = 0;
+	if (p->left)
+	{
+		left_leaf_node_count = GetLeafNodeCountAssist(p->left);
+	}
+	int right_leaf_node_count = 0;
+	if (p->right)
+	{
+		right_leaf_node_count = GetLeafNodeCountAssist(p->right);
+	}
+
+	return (left_leaf_node_count + right_leaf_node_count);
 }

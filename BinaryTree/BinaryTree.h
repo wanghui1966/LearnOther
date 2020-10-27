@@ -17,8 +17,14 @@ public:
 	BinaryTree() : head(nullptr), count(0) {}
 	virtual ~BinaryTree();
 
-public:
+publoic:
+	// 二叉树的深度
 	int GetDepth(Node *p);
+
+	// 二叉树的叶子结点数量
+	int GetLeafNodeCount();
+
+	// 二叉树结构比较
 	bool StructureCmp(const BinaryTree *tree);
 
 public:
@@ -44,8 +50,10 @@ public:
 	void PostOrderTraverseNot();
 
 public:
-	// 二叉树变为双向循环链表
+	// 二叉树变为双向链表
 	bool ConvertDoubleLink(Node *&first, Node *&last);
+	// 二叉树转换左右子树
+	void ConvertLeftAndRight();
 
 protected:
 	void PreOrderCreateAssist(Node *&p);
@@ -57,6 +65,8 @@ protected:
 	void ConvertDoubleLinkAssist(Node *node, Node *&first, Node *&last);
 	bool FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos);
 	bool StructureCmpAssist(Node *node1, Node *node2);
+	Node* ConvertLeftAndRightAssist(Node *p);
+	int GetLeafNodeCountAssist(Node *p);
 
 protected:
 	Node *head = nullptr;

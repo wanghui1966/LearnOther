@@ -11,21 +11,19 @@ BinaryTree::~BinaryTree()
 	std::cout << std::endl;
 }
 
-int BinaryTree::GetDepth(Node *p)
+int BinaryTree::GetDepth()
 {
-	if (!p)
-	{
-		return 0;
-	}
-
-	int left_depth = GetDepth(p->left);
-	int right_depth = GetDepth(p->right);
-	return (left_depth > right_depth ? (left_depth + 1) : (right_depth + 1));
+	return GetDepthAssist(head);
 }
 
 int BinaryTree::GetLeafNodeCount()
 {
 	return GetLeafNodeCountAssist(head);
+}
+
+int BinaryTree::GetNodeCountInLevelK(int k)
+{
+	return GetNodeCountInLevelKAssist(head, k);
 }
 
 bool BinaryTree::StructureCmp(const BinaryTree *tree)
@@ -378,6 +376,69 @@ bool BinaryTree::FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos)
 	}
 }
 
+int BinaryTree::GetDepthAssist(Node *p)
+{
+	if (!p)
+	{
+		return 0;
+	}
+
+	int left_depth = GetDepthAssist(p->left);
+	int right_depth = GetDepthAssist(p->right);
+	return (left_depth > right_depth ? (left_depth + 1) : (right_depth + 1));
+}
+
+int BinaryTree::GetLeafNodeCountAssist(Node *p)
+{
+	if (!p)
+	{
+		return 0;
+	}
+
+	if (!p->left && !p->right)
+	{
+		return 1;
+	}
+
+	int left_leaf_node_count = 0;
+	if (p->left)
+	{
+		left_leaf_node_count = GetLeafNodeCountAssist(p->left);
+	}
+	int right_leaf_node_count = 0;
+	if (p->right)
+	{
+		right_leaf_node_count = GetLeafNodeCountAssist(p->right);
+	}
+
+	return (left_leaf_node_count + right_leaf_node_count);
+}
+
+int BinaryTree::GetNodeCountInLevelKAssist(Node *p, int k)
+{
+	if (!p || k < 1)
+	{
+		return 0;
+	}
+
+	if (k == 1)
+	{
+		return 1;
+	}
+
+	int left_node_count = 0;
+	if (p->left)
+	{
+		left_node_count = GetNodeCountInLevelKAssist(p->left, k - 1);
+	}
+	int right_node_count = 0;
+	if (p->right)
+	{
+		right_node_count = GetNodeCountInLevelKAssist(p->right, k - 1);
+	}
+	return (left_node_count + right_node_count);
+}
+
 bool BinaryTree::StructureCmpAssist(Node *node1, Node *node2)
 {
 	if (!node1 && !node2)
@@ -413,30 +474,4 @@ Node* BinaryTree::ConvertLeftAndRightAssist(Node *p)
 	p->left = right;
 	p->right = left;
 	return p;
-}
-
-int BinaryTree::GetLeafNodeCountAssist(Node *p)
-{
-	if (!p)
-	{
-		return 0;
-	}
-
-	if (!p->left && !p->right)
-	{
-		return 1;
-	}
-
-	int left_leaf_node_count = 0;
-	if (p->left)
-	{
-		left_leaf_node_count = GetLeafNodeCountAssist(p->left);
-	}
-	int right_leaf_node_count = 0;
-	if (p->right)
-	{
-		right_leaf_node_count = GetLeafNodeCountAssist(p->right);
-	}
-
-	return (left_leaf_node_count + right_leaf_node_count);
 }

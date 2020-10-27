@@ -39,8 +39,8 @@ void TestSortTree()
 {
 	BinaryTree *bt = new BinaryTree;
 
-	char seq[10] = "abdefghic";
-	if (bt->RebuildSortTree(seq, 9))
+	char seq[11] = "ebadckfhgi";
+	if (bt->RebuildSortTree(seq, 10))
 	{
 		bt->PreOrderTraverse();
 		bt->InOrderTraverse();
@@ -54,8 +54,8 @@ void TestConvertDoubleLink()
 {
 	BinaryTree *bt = new BinaryTree;
 
-	char seq[10] = "abdefghic";
-	if (bt->RebuildSortTree(seq, 9))
+	char seq[11] = "ebadckfhgi";
+	if (bt->RebuildSortTree(seq, 10))
 	{
 		Node *first = nullptr;
 		Node *last = nullptr;
@@ -97,6 +97,27 @@ void TestConvertDoubleLink()
 	delete bt;
 }
 
+void TestConvertLeftAndRight()
+{
+	BinaryTree *bt = new BinaryTree;
+
+	char seq[11] = "ebadckfhgi";
+	if (bt->RebuildSortTree(seq, 10))
+	{
+		bt->PreOrderTraverse();
+		bt->InOrderTraverse();
+		bt->PostOrderTraverse();
+
+		bt->ConvertLeftAndRight();
+
+		bt->PreOrderTraverse();
+		bt->InOrderTraverse();
+		bt->PostOrderTraverse();
+	}
+
+	delete bt;
+}
+
 void TestCmp()
 {
 	BinaryTree *bt1 = new BinaryTree;
@@ -128,43 +149,27 @@ void TestCmp()
 		std::cout << "bt3==bt4 = " << bt3->StructureCmp(bt4) << std::endl;
 	}
 
-	delete bt1;
-	delete bt2;
-}
-
-void TestConvertLeftAndRight()
-{
-	BinaryTree *bt = new BinaryTree;
-
-	char seq[10] = "abdefghic";
-	if (bt->RebuildSortTree(seq, 9))
-	{
-		bt->PreOrderTraverse();
-		bt->InOrderTraverse();
-		bt->PostOrderTraverse();
-
-		bt->ConvertLeftAndRight();
-
-		bt->PreOrderTraverse();
-		bt->InOrderTraverse();
-		bt->PostOrderTraverse();
-	}
-
-	delete bt;
+	delete bt3;
+	delete bt4;
 }
 
 void TestCommon()
 {
 	BinaryTree *bt = new BinaryTree;
 
-	char seq[10] = "abdefghic";
-	if (bt->RebuildSortTree(seq, 9))
+	char seq[11] = "ebadckfhgi";
+	if (bt->RebuildSortTree(seq, 10))
 	{
 		bt->PreOrderTraverse();
 		bt->InOrderTraverse();
 		bt->PostOrderTraverse();
 
-		std::cout << "叶子结点数量：" << bt->GetLeafNodeCount() << std::endl;
+		int depth = bt->GetDepth();
+		std::cout << "深度：" << depth << ", 叶子结点数量：" << bt->GetLeafNodeCount() << std::endl;
+		for (int i = 1; i <= depth; ++i)
+		{
+			std::cout << "第" << i << "层结点数量：" << bt->GetNodeCountInLevelK(i) << std::endl;
+		}
 	}
 
 	delete bt;
@@ -178,6 +183,6 @@ int main()
 	//TestConvertDoubleLink();
 	//TestConvertLeftAndRight();
 	//TestCmp();
-	//TestCommon();
+	TestCommon();
 	return 0;
 }

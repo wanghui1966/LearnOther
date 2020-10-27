@@ -19,10 +19,13 @@ public:
 
 public:
 	// 二叉树的深度
-	int GetDepth(Node *p);
+	int GetDepth();
 
 	// 二叉树的叶子结点数量
 	int GetLeafNodeCount();
+
+	// 二叉树第k层结点数量
+	int GetNodeCountInLevelK(int k);
 
 	// 二叉树结构比较
 	bool StructureCmp(const BinaryTree *tree);
@@ -64,9 +67,11 @@ protected:
 	Node* RebuildTreeByPreOrderAndInOrderAssist(char *pre_order_seq, char *in_order_seq, int node_count);
 	void ConvertDoubleLinkAssist(Node *node, Node *&first, Node *&last);
 	bool FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos);
+	int GetDepthAssist(Node *p);
+	int GetLeafNodeCountAssist(Node *p);
+	int GetNodeCountInLevelKAssist(Node *p, int k);
 	bool StructureCmpAssist(Node *node1, Node *node2);
 	Node* ConvertLeftAndRightAssist(Node *p);
-	int GetLeafNodeCountAssist(Node *p);
 
 protected:
 	Node *head = nullptr;

@@ -16,6 +16,10 @@ void TestTraverse()
 	bt->InOrderTraverseNot();
 	bt->PostOrderTraverseNot();
 
+	bt->LevelOrderTraverse();
+
+	bt->OutPut();
+
 	delete bt;
 }
 
@@ -26,21 +30,6 @@ void TestRebuildTree()
 	char pre_order_seq[10] = "abdefghic";
 	char in_order_seq[10] = "dbfhgieac";
 	if (bt->RebuildTreeByPreOrderAndInOrder(pre_order_seq, in_order_seq, 9))
-	{
-		bt->PreOrderTraverse();
-		bt->InOrderTraverse();
-		bt->PostOrderTraverse();
-	}
-
-	delete bt;
-}
-
-void TestSortTree()
-{
-	BinaryTree *bt = new BinaryTree;
-
-	char seq[11] = "ebadckfhgi";
-	if (bt->RebuildSortTree(seq, 10))
 	{
 		bt->PreOrderTraverse();
 		bt->InOrderTraverse();
@@ -170,7 +159,35 @@ void TestCommon()
 		{
 			std::cout << "第" << i << "层结点数量：" << bt->GetNodeCountInLevelK(i) << std::endl;
 		}
+
+		bt->OutPut();
 	}
+
+	delete bt;
+}
+
+void TestSortTree()
+{
+	BinaryTree *bt = new BinaryTree;
+
+	char seq[11] = "ebadckfhgi";
+	if (bt->RebuildSortTree(seq, 10))
+	{
+		bt->PreOrderTraverse();
+		bt->InOrderTraverse();
+		bt->PostOrderTraverse();
+	}
+
+	delete bt;
+}
+
+
+void TestRebuildAVLTree()
+{
+	BinaryTree *bt = new BinaryTree;
+
+	char seq[11] = "ebadckfhgi";
+	bt->RebuildAVLTree(seq, 10);
 
 	delete bt;
 }
@@ -178,11 +195,12 @@ void TestCommon()
 int main()
 {
 	//TestTraverse();
-	//TestRebuildTree();
 	//TestSortTree();
 	//TestConvertDoubleLink();
 	//TestConvertLeftAndRight();
 	//TestCmp();
-	TestCommon();
+	//TestCommon();
+	//TestRebuildTree();
+	TestRebuildAVLTree();
 	return 0;
 }

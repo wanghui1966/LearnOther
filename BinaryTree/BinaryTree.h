@@ -3,12 +3,14 @@
 
 #include <map>
 
+// 平衡二叉排序树结点平衡度
 enum AVL_NODE_STATE
 {
-	AVL_NS_EQUAL_HIGH			= 0,
-	AVL_NS_LEFT_HIGH			= 1,
-	AVL_NS_RIGHT_HIGH			= 2,
+	AVL_NS_EH			= 0,	// 高度一样
+	AVL_NS_LH			= 1,	// 左边高
+	AVL_NS_RH			= 2,	// 右边高
 };
+
 struct Node
 {
 	Node() { Init(0); }
@@ -18,7 +20,7 @@ struct Node
 		data = d;
 		left = nullptr;
 		right = nullptr;
-		avl_node_state = AVL_NS_EQUAL_HIGH;
+		avl_node_state = AVL_NS_EH;
 		level = 0;
 		seq = 0;
 		pos = 0;
@@ -29,7 +31,7 @@ struct Node
 	struct Node *right = nullptr;
 
 	// 平衡二叉树用
-	AVL_NODE_STATE avl_node_state = AVL_NS_EQUAL_HIGH;
+	AVL_NODE_STATE avl_node_state = AVL_NS_EH;
 
 	// 调试用
 	int level = 0;			// 层级
@@ -98,19 +100,26 @@ public:
 
 public:
 	// 根据输入建立二叉排序树
-	bool RebuildSortTree(char *seq, int node_count);
+	bool SortTreeRebuild(char *seq, int node_count);
 protected:
-	bool FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos);
+	bool SortTreeFindPos(Node *p, char key, Node *last_pos, Node *&pos);
 
 public:
 	// 根据输入建立平衡二叉排序树
-	void RebuildAVLTree(char *seq, int node_count);
+	void AVLTreeRebuild(char *seq, int node_count);
+	// 查找
+	bool AVLTreeFind(char key, Node *&p);
+	// 删除结点
+	void AVLTreeDelete(char key);
 protected:
-	void LRotate(Node *&p);
-	void RRotate(Node *&p);
-	void LeftBalance(Node *&p);
-	void RightBalance(Node *&p);
-	bool InsertAVL(Node *&p, char key);
+	void AVLTreeLRotate(Node *&p);
+	void AVLTreeRRotate(Node *&p);
+	void AVLTreeLeftBalance(Node *&p);
+	void AVLTreeRightBalance(Node *&p);
+	bool AVLTreeInsert(Node *&p, char key);
+	Node* AVLTreeDeleteAssist(Node *&p, char key);
+	void DeleteLeftCase(Node *&p, AVL_NODE_STATE child_avl_node_state);
+	void DeleteRightCase(Node *&p, AVL_NODE_STATE child_avl_node_state);
 
 public:
 	void OutPut();

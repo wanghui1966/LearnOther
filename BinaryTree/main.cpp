@@ -44,7 +44,7 @@ void TestConvertDoubleLink()
 	BinaryTree *bt = new BinaryTree;
 
 	char seq[11] = "ebadckfhgi";
-	if (bt->RebuildSortTree(seq, 10))
+	if (bt->SortTreeRebuild(seq, 10))
 	{
 		Node *first = nullptr;
 		Node *last = nullptr;
@@ -91,7 +91,7 @@ void TestConvertLeftAndRight()
 	BinaryTree *bt = new BinaryTree;
 
 	char seq[11] = "ebadckfhgi";
-	if (bt->RebuildSortTree(seq, 10))
+	if (bt->SortTreeRebuild(seq, 10))
 	{
 		bt->PreOrderTraverse();
 		bt->InOrderTraverse();
@@ -116,10 +116,10 @@ void TestCmp()
 
 	char seq1[10] = "akgmrlpit";
 	char seq2[10] = "akgmrlpiw";
-	if (bt1->RebuildSortTree(seq1, 9))
+	if (bt1->SortTreeRebuild(seq1, 9))
 	{
 		std::cout << "bt1==bt2 = " << bt1->StructureCmp(bt2) << std::endl;
-		if (bt2->RebuildSortTree(seq2, 9))
+		if (bt2->SortTreeRebuild(seq2, 9))
 		{
 			std::cout << "bt1==bt2 = " << bt1->StructureCmp(bt2) << std::endl;
 		}
@@ -133,7 +133,7 @@ void TestCmp()
 
 	char seq3[10] = "akgmrlpit";
 	char seq4[10] = "akgmrlpic";
-	if (bt3->RebuildSortTree(seq3, 9) && bt4->RebuildSortTree(seq4, 9))
+	if (bt3->SortTreeRebuild(seq3, 9) && bt4->SortTreeRebuild(seq4, 9))
 	{
 		std::cout << "bt3==bt4 = " << bt3->StructureCmp(bt4) << std::endl;
 	}
@@ -147,7 +147,7 @@ void TestCommon()
 	BinaryTree *bt = new BinaryTree;
 
 	char seq[11] = "ebadckfhgi";
-	if (bt->RebuildSortTree(seq, 10))
+	if (bt->SortTreeRebuild(seq, 10))
 	{
 		bt->PreOrderTraverse();
 		bt->InOrderTraverse();
@@ -166,28 +166,35 @@ void TestCommon()
 	delete bt;
 }
 
-void TestSortTree()
+void TestSortTreeRebuild()
 {
 	BinaryTree *bt = new BinaryTree;
 
 	char seq[11] = "ebadckfhgi";
-	if (bt->RebuildSortTree(seq, 10))
-	{
-		bt->PreOrderTraverse();
-		bt->InOrderTraverse();
-		bt->PostOrderTraverse();
-	}
+	bt->SortTreeRebuild(seq, 10);
 
 	delete bt;
 }
 
-
-void TestRebuildAVLTree()
+void TestAVLTreeRebuild()
 {
 	BinaryTree *bt = new BinaryTree;
 
 	char seq[11] = "ebadckfhgi";
-	bt->RebuildAVLTree(seq, 10);
+	bt->AVLTreeRebuild(seq, 10);
+
+	Node *p = nullptr;
+	if (bt->AVLTreeFind('c', p))
+	{
+		std::cout << "find c::node=" << p << ", data=" << p->data << ", level=" << p->level << ", seq=" << p->seq << ", pos=" << p->pos << std::endl;
+	}
+
+	std::cout << "平衡二叉排序树删除系列(" << seq << ")" << std::endl;
+	for (int i = 0; i < 10; ++i)
+	{
+		bt->AVLTreeDelete(seq[i]);
+		bt->OutPut();
+	}
 
 	delete bt;
 }
@@ -195,12 +202,12 @@ void TestRebuildAVLTree()
 int main()
 {
 	//TestTraverse();
-	//TestSortTree();
 	//TestConvertDoubleLink();
 	//TestConvertLeftAndRight();
 	//TestCmp();
 	//TestCommon();
+	//TestSortTreeRebuild();
 	//TestRebuildTree();
-	TestRebuildAVLTree();
+	TestAVLTreeRebuild();
 	return 0;
 }

@@ -452,13 +452,13 @@ void BinaryTree::LevelOrderTraverse()
 	std::cout << std::endl << std::endl;
 }
 
-bool BinaryTree::RebuildSortTree(char *seq, int node_count)
+bool BinaryTree::SortTreeRebuild(char *seq, int node_count)
 {
 	std::cout << "建立二叉排序树(" << seq <<  ")：" << std::endl;
 	for (int i = 0; i < node_count; ++i)
 	{
 		Node *pos = nullptr;
-		if (FindSortTreePos(head, seq[i], nullptr, pos))
+		if (SortTreeFindPos(head, seq[i], nullptr, pos))
 		{
 			continue;
 		}
@@ -478,11 +478,12 @@ bool BinaryTree::RebuildSortTree(char *seq, int node_count)
 				pos->right = p;
 			}
 		}
+		OutPut();
 	}
 	return true;
 }
 
-bool BinaryTree::FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos)
+bool BinaryTree::SortTreeFindPos(Node *p, char key, Node *last_pos, Node *&pos)
 {
 	if (!p)
 	{
@@ -497,25 +498,62 @@ bool BinaryTree::FindSortTreePos(Node *p, char key, Node *last_pos, Node *&pos)
 	}
 	else if (key < p->data)
 	{
-		return FindSortTreePos(p->left, key, p, pos);
+		return SortTreeFindPos(p->left, key, p, pos);
 	}
 	else if (key > p->data)
 	{
-		return FindSortTreePos(p->right, key, p, pos);
+		return SortTreeFindPos(p->right, key, p, pos);
 	}
 }
 
-void BinaryTree::RebuildAVLTree(char *seq, int node_count)
+void BinaryTree::AVLTreeRebuild(char *seq, int node_count)
 {
 	std::cout << "建立平衡二叉排序树(" << seq <<  ")：" << std::endl;
 	for (int i = 0; i < node_count; ++i)
 	{
-		InsertAVL(head, seq[i]);
+		AVLTreeInsert(head, seq[i]);
 		OutPut();
 	}
 }
 
-void BinaryTree::LRotate(Node *&p)
+bool BinaryTree::AVLTreeFind(char key, Node *&p)
+{
+	Node *node = head;
+	while (node)
+	{
+		if (key == node->data)
+		{
+			p = node;
+			return true;
+		}
+		else if (key < node->data)
+		{
+			node = node->left;
+		}
+		else if (key > node->data)
+		{
+			node = node->right;
+		}
+	}
+
+	return false;
+}
+
+void BinaryTree::AVLTreeDelete(char key)
+{
+	AVLTreeDeleteAssist(head, key);
+	std::cout << "平衡二叉排序树删除结点" << key << std::endl;
+}
+
+// 插入新结点f，导致b失去平衡，调整b，结点b为p，为单向左旋
+//   b              d
+//  / \            / \
+// a   d          b   e
+//    / \        / \   \
+//   c   e      a   c   f
+//        \
+//         f
+void BinaryTree::AVLTreeLRotate(Node *&p)
 {
 	Node *rc = p->right;
 	p->right = rc->left;
@@ -523,7 +561,15 @@ void BinaryTree::LRotate(Node *&p)
 	p = rc;
 }
 
-void BinaryTree::RRotate(Node *&p)
+// 插入新结点a，导致e失去平衡，调整e，结点e为p，为单向右旋
+//       e          c
+//      / \        / \
+//     c   f      b   e
+//    / \        /   / \
+//   b   d      a   d   f
+//  /
+// a
+void BinaryTree::AVLTreeRRotate(Node *&p)
 {
 	Node *lc = p->left;
 	p->left = lc->right;
@@ -531,73 +577,111 @@ void BinaryTree::RRotate(Node *&p)
 	p = lc;
 }
 
-void BinaryTree::LeftBalance(Node *&p)
+// 插入新结点c，导致e失去平衡，调整e，先左旋后右旋
+//       e           e           d
+//      / \         / \         / \
+//     b   f       d   f       b   e
+//    / \         /           / \   \
+//   a   d       b           a   c   f
+//      /       / \
+//     c       a   c
+//
+//     1            2            3
+void BinaryTree::AVLTreeLeftBalance(Node *&p)
 {
 	Node *lc = p->left;
-	if (lc->avl_node_state == AVL_NS_LEFT_HIGH)
+	if (lc->avl_node_state == AVL_NS_EH)
 	{
-		p->avl_node_state = AVL_NS_EQUAL_HIGH;
-		lc->avl_node_state = AVL_NS_EQUAL_HIGH;
-		RRotate(p);
+		p->avl_node_state = AVL_NS_LH;
+		lc->avl_node_state = AVL_NS_RH;
+		AVLTreeRRotate(p);
 	}
-	else if (lc->avl_node_state == AVL_NS_RIGHT_HIGH)
+	else if (lc->avl_node_state == AVL_NS_LH)
 	{
+		// 2 -> 3
+		p->avl_node_state = AVL_NS_EH;
+		lc->avl_node_state = AVL_NS_EH;
+		AVLTreeRRotate(p);
+	}
+	else if (lc->avl_node_state == AVL_NS_RH)
+	{
+		// 1 -> 2 -> 3
 		Node *rd = lc->right;
-		if (rd->avl_node_state == AVL_NS_EQUAL_HIGH)
+		if (rd->avl_node_state == AVL_NS_EH)
 		{
-			p->avl_node_state = AVL_NS_EQUAL_HIGH;
-			lc->avl_node_state = AVL_NS_EQUAL_HIGH;
+			p->avl_node_state = AVL_NS_EH;
+			lc->avl_node_state = AVL_NS_EH;
 		}
-		else if (rd->avl_node_state == AVL_NS_LEFT_HIGH)
+		else if (rd->avl_node_state == AVL_NS_LH)
 		{
-			p->avl_node_state = AVL_NS_RIGHT_HIGH;
-			lc->avl_node_state = AVL_NS_EQUAL_HIGH;
+			p->avl_node_state = AVL_NS_RH;
+			lc->avl_node_state = AVL_NS_EH;
 		}
-		else if (rd->avl_node_state == AVL_NS_RIGHT_HIGH)
+		else if (rd->avl_node_state == AVL_NS_RH)
 		{
-			p->avl_node_state = AVL_NS_EQUAL_HIGH;
-			lc->avl_node_state = AVL_NS_LEFT_HIGH;
+			p->avl_node_state = AVL_NS_EH;
+			lc->avl_node_state = AVL_NS_LH;
 		}
-		rd->avl_node_state = AVL_NS_EQUAL_HIGH;
-		LRotate(p->left);
-		RRotate(p);
+		rd->avl_node_state = AVL_NS_EH;
+		AVLTreeLRotate(p->left);
+		AVLTreeRRotate(p);
 	}
 }
 
-void BinaryTree::RightBalance(Node *&p)
+// 插入新结点c，导致b失去平衡，调整b，先右旋后左旋
+//   b         b             d
+//  / \       / \           / \
+// a   e     a   d         b   e
+//    / \       / \       / \   \
+//   d   f     c   e     a   c   f
+//  /               \
+// c                 f
+//
+//   1          2            3
+void BinaryTree::AVLTreeRightBalance(Node *&p)
 {
 	Node *rc = p->right;
-	if (rc->avl_node_state == AVL_NS_LEFT_HIGH)
+	if (rc->avl_node_state == AVL_NS_EH)
 	{
-		Node *ld = rc->left;
-		if (ld->avl_node_state == AVL_NS_EQUAL_HIGH)
-		{
-			p->avl_node_state = AVL_NS_EQUAL_HIGH;
-			rc->avl_node_state = AVL_NS_EQUAL_HIGH;
-		}
-		else if (ld->avl_node_state == AVL_NS_LEFT_HIGH)
-		{
-			p->avl_node_state = AVL_NS_EQUAL_HIGH;
-			rc->avl_node_state = AVL_NS_RIGHT_HIGH;
-		}
-		else if (ld->avl_node_state == AVL_NS_RIGHT_HIGH)
-		{
-			p->avl_node_state = AVL_NS_EQUAL_HIGH;
-			rc->avl_node_state = AVL_NS_LEFT_HIGH;
-		}
-		ld->avl_node_state = AVL_NS_EQUAL_HIGH;
-		RRotate(p->right);
-		LRotate(p);
+		p->avl_node_state = AVL_NS_RH;
+		rc->avl_node_state = AVL_NS_LH;
+		AVLTreeLRotate(p);
 	}
-	else if (rc->avl_node_state == AVL_NS_RIGHT_HIGH)
+	else if (rc->avl_node_state == AVL_NS_LH)
 	{
-		p->avl_node_state = AVL_NS_EQUAL_HIGH;
-		rc->avl_node_state = AVL_NS_EQUAL_HIGH;
-		LRotate(p);
+		// 1 -> 2 -> 3
+		Node *ld = rc->left;
+		if (ld->avl_node_state == AVL_NS_EH)
+		{
+			p->avl_node_state = AVL_NS_EH;
+			rc->avl_node_state = AVL_NS_EH;
+		}
+		else if (ld->avl_node_state == AVL_NS_LH)
+		{
+			p->avl_node_state = AVL_NS_EH;
+			rc->avl_node_state = AVL_NS_RH;
+		}
+		else if (ld->avl_node_state == AVL_NS_RH)
+		{
+			//p->avl_node_state = AVL_NS_EH;
+			//rc->avl_node_state = AVL_NS_LH;
+			p->avl_node_state = AVL_NS_LH;
+			rc->avl_node_state = AVL_NS_EH;
+		}
+		ld->avl_node_state = AVL_NS_EH;
+		AVLTreeRRotate(p->right);
+		AVLTreeLRotate(p);
+	}
+	else if (rc->avl_node_state == AVL_NS_RH)
+	{
+		// 2 -> 3
+		p->avl_node_state = AVL_NS_EH;
+		rc->avl_node_state = AVL_NS_EH;
+		AVLTreeLRotate(p);
 	}
 }
 
-bool BinaryTree::InsertAVL(Node *&p, char key)
+bool BinaryTree::AVLTreeInsert(Node *&p, char key)
 {
 	// 插入新结点，需要调整
 	if (!p)
@@ -613,50 +697,148 @@ bool BinaryTree::InsertAVL(Node *&p, char key)
 	}
 	else if (key < p->data)
 	{
-		if (InsertAVL(p->left, key))
+		if (AVLTreeInsert(p->left, key))
 		{
-			if (p->avl_node_state == AVL_NS_EQUAL_HIGH)
+			if (p->avl_node_state == AVL_NS_EH)
 			{
 				// 父结点平衡，插入后必然会左边高，需要调整
-				p->avl_node_state = AVL_NS_LEFT_HIGH;
+				p->avl_node_state = AVL_NS_LH;
 				return true;
 			}
-			else if (p->avl_node_state == AVL_NS_LEFT_HIGH)
+			else if (p->avl_node_state == AVL_NS_LH)
 			{
 				// 父结点左边高，插入后需要左调整，需要调整(函数内)
-				LeftBalance(p);
+				AVLTreeLeftBalance(p);
 				return false;
 			}
-			else if (p->avl_node_state == AVL_NS_RIGHT_HIGH)
+			else if (p->avl_node_state == AVL_NS_RH)
 			{
 				// 父结点右边高，插入后平衡
-				p->avl_node_state = AVL_NS_EQUAL_HIGH;
+				p->avl_node_state = AVL_NS_EH;
 				return false;
 			}
 		}
 	}
 	else if (key > p->data)
 	{
-		if (InsertAVL(p->right, key))
+		if (AVLTreeInsert(p->right, key))
 		{
-			if (p->avl_node_state == AVL_NS_EQUAL_HIGH)
+			if (p->avl_node_state == AVL_NS_EH)
 			{
-				// 父结点平衡，插入后必然会右边高，需要调整
-				p->avl_node_state = AVL_NS_RIGHT_HIGH;
+				// 父结点平衡，插入后必然会右边高，需要调整(函数内)
+				p->avl_node_state = AVL_NS_RH;
 				return true;
 			}
-			else if (p->avl_node_state == AVL_NS_LEFT_HIGH)
+			else if (p->avl_node_state == AVL_NS_LH)
 			{
 				// 父结点左边高，插入后平衡
-				p->avl_node_state = AVL_NS_EQUAL_HIGH;
+				p->avl_node_state = AVL_NS_EH;
 				return false;
 			}
-			else if (p->avl_node_state == AVL_NS_RIGHT_HIGH)
+			else if (p->avl_node_state == AVL_NS_RH)
 			{
 				// 父结点右边高，插入后需要右调整，需要调整(函数内)
-				RightBalance(p);
+				AVLTreeRightBalance(p);
 				return false;
 			}
+		}
+	}
+}
+
+Node* BinaryTree::AVLTreeDeleteAssist(Node *&p, char key)
+{
+	AVL_NODE_STATE child_avl_node_state;
+	if (p)
+	{
+		if (key < p->data)
+		{
+			child_avl_node_state = p->left->avl_node_state;
+			p->left = AVLTreeDeleteAssist(p->left, key);
+			DeleteLeftCase(p, child_avl_node_state);
+		}
+		else if (key > p->data)
+		{
+			child_avl_node_state = p->right->avl_node_state;
+			p->right = AVLTreeDeleteAssist(p->right, key);
+			DeleteRightCase(p, child_avl_node_state);
+		}
+		else if (key == p->data)
+		{
+			child_avl_node_state = p->avl_node_state;
+			if (p->left)
+			{
+				// 找左子树的最右子树(左边最大值)来代替被删节点
+				Node *far_right = p->left;
+				while (far_right->right)
+				{
+					far_right = far_right->right;
+				}
+				p->data = far_right->data;
+				p->left = AVLTreeDeleteAssist(p->left, far_right->data);
+				DeleteLeftCase(p, child_avl_node_state);
+			}
+			else if (p->right)
+			{
+				// 找右子树的最左子树(右边最小值)来代替被删节点
+				Node *far_left = p->right;
+				while (far_left->left)
+				{
+					far_left = far_left->left;
+				}
+				p->data = far_left->data;
+				p->right = AVLTreeDeleteAssist(p->right, far_left->data);
+				DeleteRightCase(p, child_avl_node_state);
+			}
+			else
+			{
+				// 叶子结点，直接删除
+				free(p);
+				p = nullptr;
+			}
+		}
+	}
+
+	return p;
+}
+
+void BinaryTree::DeleteLeftCase(Node *&p, AVL_NODE_STATE child_avl_node_state)
+{
+	// 删除没有左子树 或 被删除结点删除之前不平衡，删除之后平衡了
+	// 说明p的平衡度有变化
+	if (!p->left || (AVL_NS_EH != child_avl_node_state && AVL_NS_EH == p->left->avl_node_state))
+	{
+		switch (p->avl_node_state)
+		{
+		case AVL_NS_EH:
+			p->avl_node_state = AVL_NS_RH;
+			break;
+		case AVL_NS_LH:
+			p->avl_node_state = AVL_NS_EH;
+			break;
+		case AVL_NS_RH:
+			AVLTreeRightBalance(p);
+			break;
+		}
+	}
+}
+
+void BinaryTree::DeleteRightCase(Node *&p, AVL_NODE_STATE child_avl_node_state)
+{
+	// 删除没有右子树 或 被删除结点删除之前不平衡，删除之后平衡了
+	// 说明p的平衡度有变化
+	if (!p->right || (AVL_NS_EH != child_avl_node_state && AVL_NS_EH == p->right->avl_node_state))
+	{
+		switch (p->avl_node_state)
+		{
+		case AVL_NS_EH:
+			p->avl_node_state = AVL_NS_LH;
+			break;
+		case AVL_NS_RH:
+			p->avl_node_state = AVL_NS_EH;
+			break;
+		case AVL_NS_LH:
+			AVLTreeLeftBalance(p);
+			break;
 		}
 	}
 }

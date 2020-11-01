@@ -10,7 +10,7 @@
 BinaryTree::~BinaryTree()
 {
 	std::cout << "析构函数：" << std::endl;
-	ReleaseNode(head);
+	ReleaseNode(root);
 	std::cout << std::endl;
 }
 
@@ -32,40 +32,40 @@ void BinaryTree::ReleaseNode(Node *&p)
 
 int BinaryTree::GetDepth()
 {
-	return GetDepthAssist(head);
+	return GetDepthAssist(root);
 }
 
 int BinaryTree::GetLeafNodeCount()
 {
-	return GetLeafNodeCountAssist(head);
+	return GetLeafNodeCountAssist(root);
 }
 
 int BinaryTree::GetNodeCountInLevelK(int k)
 {
-	return GetNodeCountInLevelKAssist(head, k);
+	return GetNodeCountInLevelKAssist(root, k);
 }
 
 bool BinaryTree::StructureCmp(const BinaryTree *tree)
 {
-	if (!tree && !head)
+	if (!tree && !root)
 	{
 		return true;
 	}
 
-	return StructureCmpAssist(head, tree->head);
+	return StructureCmpAssist(root, tree->root);
 }
 
 bool BinaryTree::ConvertDoubleLink(Node *&first, Node *&last)
 {
 	std::cout << "二叉树转为双向链表：" << std::endl;
-	ConvertDoubleLinkAssist(head, first, last);
+	ConvertDoubleLinkAssist(root, first, last);
 	return (first && last);
 }
 
 void BinaryTree::ConvertLeftAndRight()
 {
 	std::cout << "二叉树转换左右子树：" << std::endl;
-	ConvertLeftAndRightAssist(head);
+	ConvertLeftAndRightAssist(root);
 }
 
 int BinaryTree::GetDepthAssist(Node *p)
@@ -213,7 +213,7 @@ Node* BinaryTree::ConvertLeftAndRightAssist(Node *p)
 void BinaryTree::PreOrderCreate()
 {
 	std::cout << "先序建立二叉树：" << std::endl;
-	PreOrderCreateAssist(head);
+	PreOrderCreateAssist(root);
 	std::cout << std::endl;
 }
 
@@ -222,13 +222,13 @@ bool BinaryTree::RebuildTreeByPreOrderAndInOrder(char *pre_order_seq, char *in_o
 	std::cout << "根据先序遍历(" << pre_order_seq << ")和中序遍历(" << in_order_seq << ")重建二叉树：" << std::endl;
 	try
 	{
-		head = RebuildTreeByPreOrderAndInOrderAssist(pre_order_seq, in_order_seq, node_count);
+		root = RebuildTreeByPreOrderAndInOrderAssist(pre_order_seq, in_order_seq, node_count);
 	}
 	catch (...)
 	{
 		return false;
 	}
-	return (head);
+	return (root);
 }
 
 void BinaryTree::PreOrderCreateAssist(Node *&p)
@@ -283,21 +283,21 @@ Node* BinaryTree::RebuildTreeByPreOrderAndInOrderAssist(char *pre_order_seq, cha
 void BinaryTree::PreOrderTraverse()
 {
 	std::cout << "先序遍历二叉树：";
-	PreOrderTraverseAssist(&head);
+	PreOrderTraverseAssist(&root);
 	std::cout << std::endl << std::endl;
 }
 
 void BinaryTree::InOrderTraverse()
 {
 	std::cout << "中序遍历二叉树：";
-	InOrderTraverseAssist(head);
+	InOrderTraverseAssist(root);
 	std::cout << std::endl << std::endl;
 }
 
 void BinaryTree::PostOrderTraverse()
 {
 	std::cout << "后序遍历二叉树：";
-	PostOrderTraverseAssist(head);
+	PostOrderTraverseAssist(root);
 	std::cout << std::endl << std::endl;
 }
 
@@ -335,9 +335,9 @@ void BinaryTree::PreOrderTraverseNot()
 {
 	std::cout << "先序遍历二叉树(非递归)：";
 	std::stack<Node*> s;
-	if (head)
+	if (root)
 	{
-		s.push(head);
+		s.push(root);
 	}
 
 	while (!s.empty())
@@ -364,9 +364,9 @@ void BinaryTree::InOrderTraverseNot()
 {
 	std::cout << "中序遍历二叉树(非递归)：";
 	std::stack<Node*> s;
-	if (head)
+	if (root)
 	{
-		s.push(head);
+		s.push(root);
 	}
 
 	Node *p;
@@ -394,9 +394,9 @@ void BinaryTree::PostOrderTraverseNot()
 {
 	std::cout << "后序遍历二叉树(非递归)：";
 	std::stack<Node*> s;
-	if (head)
+	if (root)
 	{
-		s.push(head);
+		s.push(root);
 	}
 	Node *current = s.top();
 	s.pop();
@@ -428,10 +428,10 @@ void BinaryTree::PostOrderTraverseNot()
 void BinaryTree::LevelOrderTraverse()
 {
 	std::cout << "层次遍历二叉树：";
-	if (head)
+	if (root)
 	{
 		std::queue<Node*> q;
-		q.push(head);
+		q.push(root);
 
 		while (!q.empty())
 		{
@@ -458,7 +458,7 @@ bool BinaryTree::SortTreeRebuild(char *seq, int node_count)
 	for (int i = 0; i < node_count; ++i)
 	{
 		Node *pos = nullptr;
-		if (SortTreeFindPos(head, seq[i], nullptr, pos))
+		if (SortTreeFindPos(root, seq[i], nullptr, pos))
 		{
 			continue;
 		}
@@ -467,7 +467,7 @@ bool BinaryTree::SortTreeRebuild(char *seq, int node_count)
 			Node *p = new Node(seq[i]);
 			if (!pos)
 			{
-				head = p;
+				root = p;
 			}
 			else if (seq[i] < pos->data)
 			{
@@ -511,14 +511,14 @@ void BinaryTree::AVLTreeRebuild(char *seq, int node_count)
 	std::cout << "建立平衡二叉排序树(" << seq <<  ")：" << std::endl;
 	for (int i = 0; i < node_count; ++i)
 	{
-		AVLTreeInsert(head, seq[i]);
+		AVLTreeInsert(root, seq[i]);
 		OutPut();
 	}
 }
 
 bool BinaryTree::AVLTreeFind(char key, Node *&p)
 {
-	Node *node = head;
+	Node *node = root;
 	while (node)
 	{
 		if (key == node->data)
@@ -541,7 +541,7 @@ bool BinaryTree::AVLTreeFind(char key, Node *&p)
 
 void BinaryTree::AVLTreeDelete(char key)
 {
-	AVLTreeDeleteAssist(head, key);
+	AVLTreeDeleteAssist(root, key);
 	std::cout << "平衡二叉排序树删除结点" << key << std::endl;
 }
 
@@ -848,10 +848,10 @@ void BinaryTree::OutPut()
 	std::cout << "二叉树：" << std::endl;
 
 	PreOutPut();
-	if (head)
+	if (root)
 	{
 		std::queue<Node*> q;
-		q.push(head);
+		q.push(root);
 
 		int cur_out_put_level = 1;
 		std::map<int, int> cut_out_put_pos;
@@ -889,7 +889,7 @@ void BinaryTree::OutPut()
 void BinaryTree::PreOutPut()
 {
 	std::map<int, int> seq_pos_map;
-	PreOutPutAssist(GetDepth(), seq_pos_map, head, 1, 1);
+	PreOutPutAssist(GetDepth(), seq_pos_map, root, 1, 1);
 }
 
 #define GET_LEVEL_BY_SEQ(seq) ((int)(std::log(seq) / std::log(2)) + 1)

@@ -11,6 +11,13 @@ enum AVL_NODE_STATE
 	AVL_NS_RH			= 2,	// 右边高
 };
 
+// 红黑树结点颜色
+enum RBT_NODE_COLOR
+{
+	RBT_NC_RED			= 0,
+	RBT_NC_BLACK		= 1,
+};
+
 struct Node
 {
 	Node() { Init(0); }
@@ -30,8 +37,38 @@ struct Node
 	struct Node *left = nullptr;
 	struct Node *right = nullptr;
 
-	// 平衡二叉树用
+	// 二叉排序树，要么是空树要么具备以下性质
+	// 1. 若其左子树不为空，则其左子树上所有结点的值均小于此结点的值
+	// 2. 若其右子树不为空，则其右子树上所有结点的值均小于此结点的值
+	// 3. 其左右子树均为二叉排序树
+	// 4. 没有值相等的结点
+
+	// 平衡二叉树，要么是空树要么具备以下性质
+	// 1. 任意结点的平衡因子avl_node_state∈{-1, 0, 1}
+
+	// 平衡二叉排序树
 	AVL_NODE_STATE avl_node_state = AVL_NS_EH;
+
+	// 红黑树，要么是空树要么具备以下性质
+	// 1. 结点非黑即红
+	// 2. 根结点为黑
+	// 3. 叶子结点为黑
+	// 4. 红结点的左右子结点均为黑
+	// 5. 任一结点到其叶子结点的路径中包含相同的黑结点
+	RBT_NODE_COLOR rbt_node_color = RBT_NC_RED;
+
+	// B树，即B-Tree，每个结点都含有数据信息，假设为m阶
+	// 1. 每个结点最多含有m个子结点，其中m>=2
+	// 2. 除根结点和叶子结点外，其余结点最少含有ceil(m/2)个子结点
+	// 3. 若根结点不是叶子结点，则至少含有2个子结点
+	// 4. 所有的叶子结点都在同一层
+	// 5. 非叶子结点有n个子结点，则其应该有n-1个关键字
+
+	// B+树，即B+-Tree，满足B树性质，不同的是
+	// 1. 非叶子结点有n个子结点，则其应该有n个关键字
+	// 2. 只有叶子结点才含有所有的数据信息，非叶子结点只有关键字信息
+
+	// 99. B+树还有一个最大的好处，方便扫库，B树必须用中序遍历的方法按序扫库，而B+树直接从叶子结点挨个扫一遍就完了，B+树支持range-query非常方便(比如查5-10之间的)，而B树不支持，这是数据库选用B+树的最主要原因。B树的好处，就是成功查询特别有利，因为树的高度总体要比B+树矮。不成功的情况下，B树也比B+树稍稍占一点点便宜。mysql底层存储是用B+树实现的，知道为什么么。内存中B+树是没有优势的，但是一到磁盘，B+树的威力就出来了。
 
 	// 调试用
 	int level = 0;			// 层级
@@ -42,7 +79,7 @@ struct Node
 class BinaryTree
 {
 public:
-	BinaryTree() : head(nullptr), count(0) {}
+	BinaryTree() : root(nullptr), count(0) {}
 	virtual ~BinaryTree();
 protected:
 	void ReleaseNode(Node *&p);
@@ -128,7 +165,7 @@ protected:
 	void PreOutPutAssist(int depth, std::map<int, int>& seq_pos_map, Node *p, int level, int seq);
 
 protected:
-	Node *head = nullptr;
+	Node *root = nullptr;
 	int count = 0;
 };
 
